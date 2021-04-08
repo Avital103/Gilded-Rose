@@ -22,8 +22,10 @@ export class GildedRose {
             let currentItem: Item = this.items[i];
             currentItem.sellIn--;
             switch (currentItem.name) {
-                case 'Backstage passes':
                 case 'Aged Brie':
+                    this.handleAgedBrie(currentItem);
+                    break;
+                case 'Backstage passes':
                     this.handleBackstagePasses(currentItem);
                     break;
                 case 'Conjured':
@@ -59,7 +61,11 @@ export class GildedRose {
     }
 
     private handleConjured(currentItem: Item) {
-        currentItem.quality -= 2;
+        if (currentItem.quality <= 4) {
+            currentItem.quality = 0;
+        } else {
+            currentItem.quality -= 4;
+        }
     }
 
     private handleBackstagePasses(currentItem: Item) {
@@ -72,6 +78,19 @@ export class GildedRose {
             currentItem.quality += 3;
         } else if (numOfDaysToSellIn <= 10) {
             currentItem.quality += 2;
+        } else {
+            currentItem.quality++;
+        }
+
+        if (currentItem.quality > 50) {
+            currentItem.quality = 50;
+        }
+    }
+
+    private handleAgedBrie(currentItem: Item) {
+        currentItem.quality++;
+        if (currentItem.quality > 50) {
+            currentItem.quality = 50;
         }
     }
 
