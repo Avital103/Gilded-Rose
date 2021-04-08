@@ -21,28 +21,58 @@ export class GildedRose {
         for (let i = 0; i < this.items.length; i++) {
             let currentItem: Item = this.items[i];
             currentItem.sellIn--;
-            if ((currentItem.name === 'Aged Brie'
-                || currentItem.name === 'Backstage passes') && currentItem.quality < 50) {
-                let numOfDaysToSellIn = currentItem.sellIn;
-                if (numOfDaysToSellIn <= 0) {
-                    currentItem.quality = 0;
-                } else if (numOfDaysToSellIn <= 5) {
-                    currentItem.quality += 3;
-                } else if (numOfDaysToSellIn <= 10) {
-                    currentItem.quality += 2;
-                }
-            } else if (currentItem.name === 'Conjured') {
-                currentItem.quality -= 2;
-            } else if (currentItem.name === 'Sulfuras' && currentItem.quality !== 80) {
-                currentItem.quality = 80;
-            } else if (currentItem.sellIn < 0) {
-                if (currentItem.quality >= 2) {
-                    currentItem.quality -= 2
-                } else {
-                    currentItem.quality = 0;
-                }
+            switch (currentItem.name) {
+                case 'Backstage passes':
+                case 'Aged Brie':
+                    this.handleBackstagePasses(currentItem);
+                    break;
+                case 'Conjured':
+                    this.handleConjured(currentItem);
+                    break;
+                case 'Sulfuras':
+                    this.handleSulfuras(currentItem);
+                    break;
+                default:
+                    this.handleDefault(currentItem);
+                    break;
             }
         }
         return this.items;
     }
+
+    private handleDefault(currentItem: Item) {
+        if (currentItem.sellIn < 0) {
+            if (currentItem.quality >= 2) {
+                currentItem.quality -= 2
+            } else {
+                currentItem.quality = 0;
+            }
+        } else {
+            currentItem.quality--;
+        }
+    }
+
+    private handleSulfuras(currentItem: Item) {
+        if (currentItem.quality == 80) return;
+
+        currentItem.quality = 80;
+    }
+
+    private handleConjured(currentItem: Item) {
+        currentItem.quality -= 2;
+    }
+
+    private handleBackstagePasses(currentItem: Item) {
+        if (currentItem.quality == 50) return;
+
+        let numOfDaysToSellIn = currentItem.sellIn;
+        if (numOfDaysToSellIn <= 0) {
+            currentItem.quality = 0;
+        } else if (numOfDaysToSellIn <= 5) {
+            currentItem.quality += 3;
+        } else if (numOfDaysToSellIn <= 10) {
+            currentItem.quality += 2;
+        }
+    }
+
 }

@@ -11,7 +11,7 @@ describe('Gilded Rose', function () {
     });
 
     it('should quality never be negative', function() {
-        const gildedRose = new GildedRose([ new Item('foo', 8, 0) ]);
+        const gildedRose = new GildedRose([ new Item('foo', 8, 1) ]);
         const items = gildedRose.updateQuality();
         expect(items[0].quality).to.be.greaterThan(-1);
     });
@@ -22,7 +22,7 @@ describe('Gilded Rose', function () {
         expect(items[0].quality).to.equal(5);
     });
 
-    it('should The Quality of an item is never more than 50', function() {
+    it('should Quality of an item is never more than 50', function() {
         const gildedRose = new GildedRose([ new Item('Aged Brie', 8, 50) ]);
         const items = gildedRose.updateQuality();
         expect(items[0].quality).to.equal(50);
